@@ -1,4 +1,5 @@
 
+#include <sys/personality.h>
 #include <iostream>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -18,6 +19,8 @@ int main(int argc, char **argv) {
     pid_t pid = fork();
     if (pid == 0)
     {
+        personality(ADDR_NO_RANDOMIZE);
+
         // we're in the child process
         if (ptrace(PTRACE_TRACEME, 0, 0, 0))
         {
@@ -29,8 +32,8 @@ int main(int argc, char **argv) {
     {
         // we're in the parent process
         std::cout << "Started debugging the child process with the id of : " << pid << "\n";
-        debugger db {program, pid};
-        db.run();
+        debugger debugger {program, pid};
+        debugger.run();
     }
 
     return 0;

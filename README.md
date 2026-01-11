@@ -4,9 +4,9 @@ Learn how to implement a linux debugger in C/C++ language.
 
 ## Features supported
 
-- [ ] launch, halt and continue e ecution
+- [x] launch, halt and continue e ecution
 - [ ] set breakpionts on
-  - [ ] memory addresses
+  - [x] memory addresses
   - [ ] source code lines
   - [ ] function entry
 - [ ] read and write registers and memory

@@ -13,7 +13,7 @@ void debugger::run(){
 
     int wait_status = 0;
     int options = 0;
-    waitpid(m_pid, &wait_status, options);  // we wait for the 'SIGTRP' signal to be sent, which is a trace or
+    waitpid(m_pid, &wait_status, options);  // we wait for the 'SIGTRAP' signal to be sent, which is a trace or
                                             // or a breakpoint trap. It is sent when the child process starts.
 
     char *line = nullptr;
@@ -34,6 +34,11 @@ void debugger::handle_command(const std::string &line) {
     if (is_prefix(command, "continue"))
     {
         continue_execution();
+    } else if (is_prefix(command, "break"))
+    {
+        std::string addr { args[1], 2 }; // assume that the user typed 0xADRRESS, so we remove the first
+                                        // the first two characters.
+        set_breakpoint_at_address(std::stol(addr, 0, 16));
     } else
     {
         std::cerr << "Unknow command!!!\n";
@@ -47,4 +52,14 @@ void debugger::continue_execution() {
     int wait_status;
     int options = 0;
     waitpid(m_pid, &wait_status, options);
+}
+
+void debugger::set_breakpoint_at_address(std::intptr_t addr) {
+    std::cout << "set breakpoint at address " << std::hex << addr << "\n";
+
+    breakpoint bp { m_pid, addr };
+    bp.enable();
+
+    // m_breakpoints[addr] = bp;
+    m_breakpoints.insert({ m_pid, bp });
 }

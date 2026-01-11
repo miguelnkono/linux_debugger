@@ -9,9 +9,11 @@ add_executable(${PROJECT_NAME}
     main.cpp
     debugger.h
     debugger.cpp
+    breakpoint.h
+    breakpoint.cpp
 )
 
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_14)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE linenoise
     ${PROJECT_SOURCE_DIR}/ext/libelfin/dwarf/libdwarf++.so
