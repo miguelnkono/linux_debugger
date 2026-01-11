@@ -5,9 +5,14 @@ project(linux_debugger)
 add_subdirectory(ext)
 
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME}
+    main.cpp
+    debugger.h
+    debugger.cpp
+)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_14)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE linenoise
     ${PROJECT_SOURCE_DIR}/ext/libelfin/dwarf/libdwarf++.so
     ${PROJECT_SOURCE_DIR}/ext/libelfin/elf/libelf++.so
