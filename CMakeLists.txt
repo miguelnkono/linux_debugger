@@ -4,13 +4,14 @@ project(linux_debugger)
 
 add_subdirectory(ext)
 
-
 add_executable(${PROJECT_NAME}
     main.cpp
     debugger.h
     debugger.cpp
     breakpoint.h
     breakpoint.cpp
+    register.h
+    register.cpp
 )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)

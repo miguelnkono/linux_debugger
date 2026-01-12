@@ -2,6 +2,8 @@
 .vscode/
 
 build/
+test_programs/
 
 history.txt
 notes.txt
+
