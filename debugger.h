@@ -31,6 +31,10 @@ private:
     ptrace(PTRACE_POKEDATA, m_pid, addr, value);
   }
 
+  uint64_t get_pc();
+  void set_pc(uint64_t pc);
+  void wait_for_signal();
+
 public:
   // debugger(std::string program_name, pid_t pid) :
   // m_program_name{std::move(m_program_name)}, m_pid{pid} {}
@@ -44,6 +48,8 @@ public:
   void set_breakpoint_at_address(std::intptr_t addr);
 
   void dump_registers();
+
+  void step_over_breakpoint();
 };
 
 #endif // __DEBUGGER_H__

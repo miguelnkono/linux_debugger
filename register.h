@@ -46,6 +46,8 @@ struct reg_descriptor {
   std::string name;
 };
 
+// this g_register_descriptors struct is the miror of the 'user_regs_struct'
+// struct.
 const std::array<reg_descriptor, n_registers> g_register_descriptors{{
     {reg::r15, 15, "r15"},
     {reg::r14, 14, "r14"},

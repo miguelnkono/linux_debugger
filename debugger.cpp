@@ -66,11 +66,11 @@ void debugger::handle_command(const std::string &line) {
 }
 
 void debugger::continue_execution() {
+  step_over_breakpoint();
+
   ptrace(PTRACE_CONT, m_pid, nullptr, nullptr);
 
-  int wait_status;
-  int options = 0;
-  waitpid(m_pid, &wait_status, options);
+  wait_for_signal();
 }
 
 void debugger::set_breakpoint_at_address(std::intptr_t addr) {
@@ -88,4 +88,34 @@ void debugger::dump_registers() {
     std::cout << rd.name << " 0x" << std::setfill('0') << std::setw(16)
               << std::hex << get_register_value(m_pid, rd.r) << std::endl;
   }
+}
+
+uint64_t debugger::get_pc() { return get_register_value(m_pid, reg::rip); }
+
+void debugger::set_pc(uint64_t pc) { set_register_value(m_pid, reg::rip, pc); }
+
+void debugger::step_over_breakpoint() {
+
+  uint64_t possible_breakpoint_location = get_pc() - 1;
+
+  if (m_breakpoints.count(possible_breakpoint_location)) {
+    breakpoint &bp = m_breakpoints[possible_breakpoint_location];
+
+    if (bp.is_enable()) {
+      uint64_t previous_instruction_address = possible_breakpoint_location;
+      set_pc(previous_instruction_address);
+
+      bp.disable();
+      ptrace(PTRACE_SINGLESTEP, m_pid, nullptr, nullptr);
+      wait_for_signal();
+      bp.enable();
+    }
+  }
+}
+
+void debugger::wait_for_signal() {
+
+  int wait_status;
+  int options = 0;
+  waitpid(m_pid, &wait_status, options);
 }
