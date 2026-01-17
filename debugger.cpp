@@ -37,7 +37,7 @@ void debugger::handle_command(const std::string &line) {
     continue_execution();
   } else if (is_prefix(command, "break")) {
     std::string addr{args[1], 2}; // assume that the user typed 0xADRRESS, so we
-                                  // remove the first the first two characters.
+                                  // remove the first two characters.
     set_breakpoint_at_address(std::stol(addr, 0, 16));
   } else if (is_prefix(command, "register")) {
     if (is_prefix(args[1], "dump"))
@@ -48,7 +48,7 @@ void debugger::handle_command(const std::string &line) {
     else if (is_prefix(args[1], "write")) {
       std::string val{args[3], 2};
       set_register_value(m_pid, get_register_from_name(args[2]),
-                         std::stol(val));
+                        std::stol(val));
     }
   } else if (is_prefix(command, "memory")) {
     std::string address{args[2], 2};
